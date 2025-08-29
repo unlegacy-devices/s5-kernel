@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export ARCH=arm
-export CROSS_COMPILE=~/ubertc/bin/arm-eabi-
+export CROSS_COMPILE=/opt/toolchains/arm-eabi-4.8/bin/arm-eabi-
 
 mkdir output
 
