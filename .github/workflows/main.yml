@@ -1,0 +1,35 @@
+name: CyanogenMod Kernel CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Kernel Source
+      uses: actions/checkout@v4
+
+    - name: Getting Toolchain
+      run: |
+        sudo apt-get install lib32z1
+        sudo git clone --depth 1 --branch android-6.0.1_r81 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8 /opt/toolchains/arm-eabi-4.8/
+    - name: Building Kernel
+      run: |
+        bash build_kernel.sh
+    - name: Moving Output # CI only
+      run: |
+        mkdir -p /home/runner/work/output
+        cp arch/arm/boot/zImage /home/runner/work/output/zImage
+    - name: Uploading Output
+      uses: actions/upload-artifact@v4
+      with:
+        name: zImage
+        path: /home/runner/work/output/zImage
+        
+    - name: Uploading Modules
+      uses: actions/upload-artifact@v4
+      with:
+        name: dt.img
+        path: /home/runner/work/output/dt.img
